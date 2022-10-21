@@ -33,7 +33,9 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 
 ### Wire Frames
 
-![Grid Format](SWIRTH9092/project1/wireframeimages/project1-gridlayout.jpg)
+![Grid Format](SWIRTH9092/project1/wireframeimages/project1-gridlayout.jpg "Grid")
+
+![Grid Format](https://imgur.com/zrExMCn)
 
 
 ### Stretch Objectives
