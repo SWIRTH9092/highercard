@@ -35,8 +35,17 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 
 ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-gridlayout.jpg "Grid")
 
-[Grid-Format](https://i.imgur.com/DkVuTjC.jpg)
+![web page 01](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-01-webpage.jpg "Web page 1")
 
+![web page 02](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-02-webpage.jpg "Web page 2")
+
+![web page 03](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-03-webpage.jpg "Web page 3")
+
+![[ph page 01]](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-10-phone.jpg "Phone page 1")
+
+![ph page 02](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-11-phone.jpg "Phone page 2")
+
+![ph page 03](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-12-phone.jpg "Phone page 3")
 
 ### Stretch Objectives
 - add nav menu at top:  
