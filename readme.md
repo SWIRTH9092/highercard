@@ -33,7 +33,7 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 
 ### Wire Frames
 
-!["Grid Format"]
+![Grid Format]
     (/project1/wireframeimages/project1-gridlayout)
 
 
