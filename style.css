@@ -1,0 +1,32 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1rem 2rem 3rem 2rem 2rem 3rem 1rem; 
+    border: 5px solid black;
+    gap: 5px;
+    justify-items: center; 
+    align-items:  center;
+}
+
+.grid-row-1 {
+    border: 2px dashed blue;
+}
+.grid-row-2 {
+    border: 2px dashed green
+}
+.grid-row-3 {
+    border: 2px dashed red
+}
+.grid-row-4 {
+    border: 2px dashed blue;
+}
+.grid-row-5 {
+    border: 2px dashed green;   
+}
+.grid-row-6 {
+    border: 2px dashed red;
+}
+.grid-row-7 {
+    border: 2px dashed blue;
+}
+

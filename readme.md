@@ -28,7 +28,6 @@ https://deckofcardsapi.com/
 | 1 | Choose and test API |
 | 2 | Create wire frames and Submit for Project Approval
 | 3 | Render data to screen |
-| 3 | Create form |
 | 4 | Create CSS w/ grid structure|
 | 5 | Code Game Logic
 | 6 | Code Game Logic
