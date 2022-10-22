@@ -1,25 +1,41 @@
-// variable for api key
-// const apiKey = "bee3427"
+//  status of deck - deck_id; remaining; and sucess;
+const deckStatus = {
+    deckID: "new",
+    remainingCardsInDeck: 52,
+    success: " "
+}
+
+let deckID_API = "new"    // default is new for first call
+//  Array to hold the number of cards
 
 // variable for base url
 const baseURL = 'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
 
-let deckID = "kutpw83xkk0x"
+//default is New
+let deckID = "new"  
 
-const shuffleDraw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=2`
+const shuffleDraw = `https://deckofcardsapi.com/api/deck/${deckID_API}/draw/?count=9`
 
-// function that does movie search
-function colorSearch() {
-    // constructing url for request
-    const url = `${baseURL}`
-     
+// // process Deck Status Data
+//     function processDeckStatus (data) {
+//         deckStatus.deckID = data.deck_ID
+//         deckStatus.remainingCardsInDeck = data.remaining
+//         deckStatus.success = data.sucess
+//         console.log("deckStatus", deckStatus)
+//     }
 
-    // make our request
+    // function gets a new deck of cards and draws
+function getCardDeck() {
+    // make api call
     $.ajax(shuffleDraw)
-    .then((color) => {
-        console.log(color)
-    })
+    .then(
+        (drawData) => {
+        console.log(drawData)
+        // function processDeckStatus(drawData)
+        },
+        (error) => {
+            console.log("error:", error)
+        })
+} 
 
-
-}
-    colorSearch()
+    getCardDeck()
