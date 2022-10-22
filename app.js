@@ -16,13 +16,14 @@ let deckID = "new"
 
 const shuffleDraw = `https://deckofcardsapi.com/api/deck/${deckID_API}/draw/?count=9`
 
-// // process Deck Status Data
-//     function processDeckStatus (data) {
-//         deckStatus.deckID = data.deck_ID
-//         deckStatus.remainingCardsInDeck = data.remaining
-//         deckStatus.success = data.sucess
-//         console.log("deckStatus", deckStatus)
-//     }
+// process Deck Status Data
+function processDeckStatus (data) {
+    deckID_API = data.deck_id
+    deckStatus.deckID = data.deck_id
+    deckStatus.remainingCardsInDeck = data.remaining
+    deckStatus.success = data.success
+    console.log("deckStatus", deckStatus)
+}
 
     // function gets a new deck of cards and draws
 function getCardDeck() {
@@ -31,7 +32,7 @@ function getCardDeck() {
     .then(
         (drawData) => {
         console.log(drawData)
-        // function processDeckStatus(drawData)
+        processDeckStatus(drawData)
         },
         (error) => {
             console.log("error:", error)
