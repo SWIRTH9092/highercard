@@ -15,6 +15,11 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 
    https://project1-virid-nine.vercel.app/
 
+
+### API - Card Deck: 
+
+https://deckofcardsapi.com/
+
 ### Daily Plan
 
 
