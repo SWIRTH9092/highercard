@@ -1,7 +1,7 @@
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1rem 2rem 3rem 2rem 2rem 3rem 1rem; 
+    grid-template-rows: 0rem 3fr 8fr 2fr 2fr 3fr 1fr; 
     border: 5px solid black;
     gap: 5px;
     justify-items: center; 
@@ -12,10 +12,13 @@
     border: 2px dashed blue;
 }
 .grid-row-2 {
-    border: 2px dashed green
+    border: 2px dashed green;
+    font-size: 2rem;
 }
 .grid-row-3 {
-    border: 2px dashed red
+    border: 2px dashed red;
+    justify-items: top;
+    align-items: top;
 }
 .grid-row-4 {
     border: 2px dashed blue;
@@ -30,3 +33,13 @@
     border: 2px dashed blue;
 }
 
+.faceshowing {
+    height: 8rem;
+    width: auto;
+    border: 10px solid white;
+}
+
+.compareshowing {
+    height: 8rem;
+    width:auto;
+}
