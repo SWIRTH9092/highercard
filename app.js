@@ -182,9 +182,11 @@ $nodes.buttonChoice.on ("click", (event) => {
     console.log("innerText", $buttonChoiceEvent.target.innerText)
     switch ($buttonChoiceEvent.target.innerText) {
         case "Higher":
+            renderCard (1, "face")
             processHigherButton()
             break;
         case "Lower":
+            renderCard (1, "face")
             processLowerButton()
             break;
         case "Draw":
@@ -197,41 +199,55 @@ $nodes.buttonChoice.on ("click", (event) => {
 
 })
 //-----------------------------------------------------------------------
-// Process Higher Button
+// Process Higher Button 
+//    -  was the face card value > compare card value? (guess correct?)
 //-----------------------------------------------------------------------
+
 function processHigherButton () {
-    
-    //  was the face card value > compare card value? (guess correct?)
-    renderCard (1, "face")
-    console.log(cardValues)
-    console.log("cardValues[0][2]", cardValues[0][2])
-    console.log("cardValues[0][2]", cardValues[1][2])
     
     //  if face card value < compare card value, higher guess was "wrong"
     if (cardValues[0][2] > cardValues[1][2]) {
-        console.log("incorrect guess")
-        $nodes.messageText.text("Your guess was incorrect. Try again by  clicking on Draw to continue.")
+        $nodes.messageText.text("Your guess of 'higher' was incorrect. Try again by  clicking on Draw to continue.")
         wrongGuesses += 1
         updateStatsMessage()
 
     //  if face card value > compare card value, higher guess was "correct"  
     } else if (cardValues[0][2] < cardValues[1][2]) {
-        console.log("correct guess")
-        $nodes.messageText.text("Congratulations.  Your guess was correct.  Click on Draw to continue.")
+        $nodes.messageText.text("Congratulations.  Your guess of 'higher' was correct.  Click on Draw to continue.")
         correctGuesses += 1
         updateStatsMessage()
 
     } else {
     //  if face card value = compare card value - 
     //         Neither (higher or lower) was true; no guess penalty       
-        console.log("neither higher nor lower")
         $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
     }
   
 }
-  
+//-----------------------------------------------------------------------
+// Process Lower Button 
+//    -  was the face card value > compare card value? (guess correct?)
+//----------------------------------------------------------------------- 
 function processLowerButton () {
-    console.log("process lower Button")
+
+    //  if face card value < compare card value, lower guess was "correct"
+    if (cardValues[0][2] > cardValues[1][2]) {
+        $nodes.messageText.text("Congratulations.  Your guess of 'lower' was correct.  Click on Draw to continue.")
+        correctGuesses += 1
+        updateStatsMessage()
+
+    //  if face card value > compare card value, lower guess was "incorrect"  
+    } else if (cardValues[0][2] < cardValues[1][2]) {
+        $nodes.messageText.text("Your guess of 'lower' was incorrect. Try again by  clicking on Draw to continue.")
+        wrongGuesses += 1
+        updateStatsMessage()
+
+    } else {
+    //  if face card value = compare card value - 
+    //         Neither (higher or lower) was true; no guess penalty       
+        $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
+    }
+
 }
 
 function processDrawButton () {
