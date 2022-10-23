@@ -2,9 +2,8 @@
 
 const gameInfo = {
         stats: { 
-            gameWins: 0,
-            gameLosses: 0,
-            gameTies: 0,
+            correctGuesses: 0,
+            wrongGuesses: 0,
         }
 }
 //   Card [0] - card displayed
@@ -19,13 +18,20 @@ let cardValues = [
     [0, "xxxx", 1],
     [1, "yyyy", 2]
 ];
-            
+
+//  define guess Stats
+let correctGuesses = 0;
+let wrongGuesses = 0;
+
 //  Define Jquery  variables
 
 const $nodes = {
     faceShowing: $(".faceshowing"),
     compareShowing: $(".compareshowing"),
     buttonChoice: $(".choice"),
+    messageText: $(".message"),
+    statsWrong: $(".wrong"),
+    statsCorrect: $(".correct")
 }
 
 // variable for base url
@@ -115,8 +121,11 @@ function saveCard(arrPos, data) {
             case "JACK":
                 cardValues[arrPos] [2] = (11);
                 break;
+            case "10":
+                cardValues[arrPos] [2] = (10);
+                    break;
             default:
-                cardValues[arrPos] [2] = (data.cards [arrPos].value);
+                cardValues[arrPos] [2] = ('0' + data.cards [arrPos].value);
                 break;
     }
 }
@@ -190,13 +199,35 @@ $nodes.buttonChoice.on ("click", (event) => {
 //-----------------------------------------------------------------------
 // Process Higher Button
 //-----------------------------------------------------------------------
-
 function processHigherButton () {
     
     //  was the face card value > compare card value? (guess correct?)
-    // if (cardValues[0][2] > cardValues[1][2]) {
+    renderCard (1, "face")
+    console.log(cardValues)
+    console.log("cardValues[0][2]", cardValues[0][2])
+    console.log("cardValues[0][2]", cardValues[1][2])
+    
+    //  if face card value < compare card value, higher guess was "wrong"
+    if (cardValues[0][2] > cardValues[1][2]) {
+        console.log("incorrect guess")
+        $nodes.messageText.text("Your guess was incorrect. Try again by  clicking on Draw to continue.")
+        wrongGuesses += 1
+        updateStatsMessage()
 
-    // }
+    //  if face card value > compare card value, higher guess was "correct"  
+    } else if (cardValues[0][2] < cardValues[1][2]) {
+        console.log("correct guess")
+        $nodes.messageText.text("Congratulations.  Your guess was correct.  Click on Draw to continue.")
+        correctGuesses += 1
+        updateStatsMessage()
+
+    } else {
+    //  if face card value = compare card value - 
+    //         Neither (higher or lower) was true; no guess penalty       
+        console.log("neither higher nor lower")
+        $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
+    }
+  
 }
   
 function processLowerButton () {
@@ -206,3 +237,15 @@ function processLowerButton () {
 function processDrawButton () {
     console.log("process draw Button")
 }
+
+//-----------------------------------------------------------------------
+// Update Stats Messages
+//-----------------------------------------------------------------------
+
+function updateStatsMessage() {
+    $nodes.statsCorrect.text(`Correct Guesses: ${correctGuesses}`)
+    $nodes.statsWrong.text(`Wrong Guesses: ${wrongGuesses}`)
+}
+
+
+
