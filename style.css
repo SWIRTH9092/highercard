@@ -17,7 +17,8 @@ row 7 - future footer    */
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2rem 1fr 2fr 1fr 1fr 1fr 0fr; 
+    grid-template-rows: 2rem 4rem
+     2fr 1fr 1fr 1fr 0fr; 
     border: 5px solid #B8141F;
     justify-items: center; 
     align-items:  center;
@@ -61,4 +62,11 @@ row 7 - future footer    */
 .compareshowing {
     height: 10rem;
     width:auto;
+}
+.message {
+    text-align: center;
+}
+
+.draw {
+    visibility: hidden;
 }
