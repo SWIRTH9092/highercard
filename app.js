@@ -8,16 +8,17 @@ const gameInfo = {
         }
 }
 //   Card [0] - card displayed
-//     0 - compareValue
+//     0 - array position
 //     1 - image link
+//     2 - compareValue
 //   Card [1] = card face down or face up
-//     0 - compareValue
+//     0 - array position
 //     1 - image link
-
+//     2 - compareValue
 //note:
 let cardValues = [
-    [1, "xxxx"],
-    [2, "yyyy"]
+    [0, "xxxx", 1],
+    [1, "yyyy", 2]
 ];
             
 console.log("Cardvalues", cardValues)
@@ -41,6 +42,8 @@ const draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo
 
 
 // save the card values in array
+//arrPos - 0 - face card values
+//         1 - compare card values
 function saveCard(arrPos, data) {
 
 cardValues [arrPos][1] = (data.cards[arrPos].image)
@@ -49,19 +52,19 @@ cardValues [arrPos][1] = (data.cards[arrPos].image)
 
         switch (data.cards[arrPos].value) {
                 case "ACE":
-                    cardValues[arrPos] [0] = (14);
+                    cardValues[arrPos] [2] = (14);
                     break;
                 case "KING":
-                    cardValues[arrPos] [0] = (13);
+                    cardValues[arrPos] [2] = (13);
                     break;
                 case "QUEEN":
-                    cardValues[arrPos] [0] = (12);
+                    cardValues[arrPos] [2] = (12);
                     break;
                 case "JACK":
-                    cardValues[arrPos] [0] = (11);
+                    cardValues[arrPos] [2] = (11);
                     break;
                 default:
-                    cardValues[arrPos] [0] = (data.cards [arrPos].value);
+                    cardValues[arrPos] [2] = (data.cards [arrPos].value);
                     break;
         }
 }
@@ -111,8 +114,6 @@ function getCardDeck() {
             console.log("error:", error)
         })
 } 
-
-    
 
     getCardDeck()
 //renderCard(1,"face")

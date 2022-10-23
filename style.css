@@ -1,30 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Paaji+2&display=swap');
+
+/*  set background color */
+* body {
+    background-color: #EBF7D4;
+}
+
+/*  grid container rows 
+row 1 - future menu
+row 2 - title
+row 3 - cards
+row 4 - messages
+row 5 - buttons
+row 6 - stats
+row 7 - future footer    */
+
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 0rem 3fr 8fr 2fr 2fr 3fr 1fr; 
-    border: 5px solid black;
-    gap: 5px;
+    grid-template-rows: 2rem 1fr 2fr 1fr 1fr 1fr 0fr; 
+    border: 5px solid #B8141F;
     justify-items: center; 
     align-items:  center;
 }
 
 .grid-row-1 {
     border: 2px dashed blue;
+    background-color: #B8141F
 }
 .grid-row-2 {
     border: 2px dashed green;
     font-size: 2rem;
+    font-family: 'Baloo Paaji 2', cursive;
 }
 .grid-row-3 {
     border: 2px dashed red;
+    display: inline;
     justify-items: top;
     align-items: top;
+    max-height: 100%;
 }
 .grid-row-4 {
     border: 2px dashed blue;
 }
 .grid-row-5 {
-    border: 2px dashed green;   
+    border: 2px dashed green;  
+    display: inline; 
 }
 .grid-row-6 {
     border: 2px dashed red;
@@ -34,12 +54,11 @@
 }
 
 .faceshowing {
-    height: 8rem;
+    height: 10rem;
     width: auto;
-    border: 10px solid white;
 }
 
 .compareshowing {
-    height: 8rem;
+    height: 10rem;
     width:auto;
 }
