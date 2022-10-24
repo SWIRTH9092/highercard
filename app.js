@@ -34,14 +34,13 @@ const $nodes = {
     statsCorrect: $(".correct")
 }
 
-// variable for base url
-const baseURL = 'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
-
 //default is New, first draw is 2
 let deckID = "new" 
 let drawNo = 2 
+let cardsleftInDeck = 52
 
-const draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo}`
+let draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo}`
+let shuffle = `https://deckofcardsapi.com/api/deck/${deckID}/shuffle`
 
 //-----------------------------------------------------------------------
 //    function:  getCardDeck() is executed to get the API data for the 
@@ -66,6 +65,7 @@ function getCardDeck() {
         (error) => {
             console.log("error:", error)
         })
+    return;
 } 
 
 //-----------------------------------------------------------------------
@@ -83,21 +83,21 @@ function processDeck (data) {
     //     - Next API will draw from the current deck
     //     - 1 card for will drawn (inital draw from a deck requires 2 cards)
 
-    deckID_API = data.deck_id   //next API will draw from the current deck
+    deckID = data.deck_id   //next API will draw from the current deck
     drawNo = 1
-
-console.log(data)
+    cardsleftInDeck = data.remaining
+    draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo}`
   
     // save card values to 2 dimensional table (face card, compare card)
         saveCard(0,data) 
         saveCard(1,data)
-        console.log(cardValues)
         renderCard (0, "face")
         renderCard (1, "back")
+    return;
 }   
 
 //-----------------------------------------------------------------------
-// process saves card image link and generated compare value
+// process saves card image link and generated compare value for 2 cards drawn
 //-----------------------------------------------------------------------
 //  save the card values in array
 //      arrPos - 0 - face card values
@@ -128,6 +128,7 @@ function saveCard(arrPos, data) {
                 cardValues[arrPos] [2] = ('0' + data.cards [arrPos].value);
                 break;
     }
+return;
 }
 
 //-----------------------------------------------------------------------
@@ -142,7 +143,6 @@ function saveCard(arrPos, data) {
 //                     either the front or back)
 //-----------------------------------------------------------------------
 function renderCard (cardNo, type) {
-    console.log("renderCard", cardNo, type)
     if (cardNo === 0) {
         $nodes.faceShowing.attr("src", cardValues [cardNo] [1]) 
     } else if (type === "back") {
@@ -150,8 +150,9 @@ function renderCard (cardNo, type) {
     } else {
         $nodes.compareShowing.attr("src", cardValues[cardNo] [1])     
     } 
-  }
-    
+    return;  
+}
+     
 //-----------------------------------------------------------------------
 // event Listener for buttons
 //   1 - higher button -  will compare face card to compare card to see 
@@ -169,8 +170,6 @@ $nodes.buttonChoice.on ("click", (event) => {
 
     //  create jquery object for event
     $buttonChoiceEvent = event
-    console.log("event target", event.target) 
-    console.log("event", event)
 
     //  verifies this click was for a button
     //  bypass all clicks not for a button
@@ -179,7 +178,6 @@ $nodes.buttonChoice.on ("click", (event) => {
     }
     
     //  Determine which button was clicked: higher, lower or draw
-    console.log("innerText", $buttonChoiceEvent.target.innerText)
     switch ($buttonChoiceEvent.target.innerText) {
         case "Higher":
             renderCard (1, "face")
@@ -196,7 +194,7 @@ $nodes.buttonChoice.on ("click", (event) => {
             console.log("invalid button found")
             break;
     }
-
+    return;
 })
 //-----------------------------------------------------------------------
 // Process Higher Button 
@@ -222,7 +220,7 @@ function processHigherButton () {
     //         Neither (higher or lower) was true; no guess penalty       
         $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
     }
-  
+    return;
 }
 //-----------------------------------------------------------------------
 // Process Lower Button 
@@ -247,12 +245,75 @@ function processLowerButton () {
     //         Neither (higher or lower) was true; no guess penalty       
         $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
     }
-
+    return;
 }
-
+//-----------------------------------------------------------------------
+// Process Draw Button
+//----------------------------------------------------------------------- 
 function processDrawButton () {
-    console.log("process draw Button")
+
+    // If at end of deck, reshuffle the deck
+        // if zero cards remaining in deck, shuffle to get drawn cards back
+        //    will use nested API calls to keep in sync...   
+        if (cardsleftInDeck === 0) {
+            // save deckid in shuffle
+            shuffle = `https://deckofcardsapi.com/api/deck/${deckID}/shuffle`
+            // make API call to shuffle deck
+            $.ajax(shuffle)
+             .then(
+                 (shuffleData) => {
+                    if (shuffleData.success !== true) {
+                     console.log("01 - unsuccesful API call for Shuffle")
+                     return
+                    } else {
+                        // execute API call to draw 1 card - preset after initial draw
+                        // make api call
+                        $.ajax(draw)
+                        .then(
+                            (drawData) => {
+                            processDraw(drawData)
+                            return;
+                            },
+                            (error) => {
+                                console.log("02 - error:", error)
+                                return;
+                            })
+                        return;
+                    }
+                },              
+                (error) => {
+                    console.log("03 - error:", error)
+                    return
+                })
+         } 
+         else {
+            // Remaing cards left > 0
+            //     execute API call to draw 1 card - preset after initial draw
+            //     make api call
+            $.ajax(draw)
+            .then(
+                (drawData) => {
+                        // check API call sucess
+                     if (drawData.success !== true) {
+                        console.log("unsuccesful API call")
+                        console.log("cardsLeftInDeck", cardsleftInDeck)
+                        return
+                    } else {
+                        processDraw(drawData)
+                        return;
+                    }      
+                },
+                (error) => {
+                    console.log("04 - error:", error)
+                    return;
+                })
+            return;
+        }
+    return;
 }
+
+
+
 
 //-----------------------------------------------------------------------
 // Update Stats Messages
@@ -261,7 +322,60 @@ function processDrawButton () {
 function updateStatsMessage() {
     $nodes.statsCorrect.text(`Correct Guesses: ${correctGuesses}`)
     $nodes.statsWrong.text(`Wrong Guesses: ${wrongGuesses}`)
+    return
 }
 
+//-----------------------------------------------------------------------
+// process Deck Data from initial API call
+//-----------------------------------------------------------------------
+function processDraw (data) {
 
+    //  sets defauls for future calls.  
+    //     - Next API will draw from the current deck
+    //     - 1 card for will drawn (inital draw from a deck requires 2 cards)
 
+    cardsleftInDeck = data.remaining
+  
+    // save card values to 2 dimensional table (face card, compare card)
+        cardValues[0][1] = cardValues[1][1]
+        cardValues[0][2] = cardValues[1][2]
+        saveCard1Draw(1,data)
+        renderCard (0, "face")
+        renderCard (1, "back")
+        return
+}   
+
+//-----------------------------------------------------------------------
+// process saves card image link and generated compare value for 1 cards drawn
+//-----------------------------------------------------------------------
+//  save the card values in array
+//      arrPos - 0 - face card values
+//               1 - compare card values
+
+function saveCard1Draw(arrPos, data) {
+//  save image link
+    cardValues [arrPos][1] = (data.cards[0].image)
+
+// set card compare value
+    switch (data.cards[0].value) {
+            case "ACE":
+                cardValues[arrPos] [2] = (14);
+                break;
+            case "KING":
+                cardValues[arrPos] [2] = (13);
+                break;
+            case "QUEEN":
+                cardValues[arrPos] [2] = (12);
+                break;
+            case "JACK":
+                cardValues[arrPos] [2] = (11);
+                break;
+            case "10":
+                cardValues[arrPos] [2] = (10);
+                    break;
+            default:
+                cardValues[arrPos] [2] = ('0' + data.cards [0].value);
+                break;
+    }
+    return
+}
