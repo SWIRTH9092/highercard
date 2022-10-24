@@ -10,15 +10,15 @@ row 1 - future menu
 row 2 - title
 row 3 - cards
 row 4 - messages
-row 5 - buttons
-row 6 - stats
-row 7 - future footer    */
+row 5 - buttons - higher, lower
+row 6 - button - draw
+row 7 - stats    */
 
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 2rem 4rem
-     2fr 1fr 1fr 1fr 0fr; 
+     2fr 1fr 2rem 2rem 1fr; 
     border: 5px solid #B8141F;
     justify-items: center; 
     align-items:  center;

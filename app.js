@@ -29,6 +29,8 @@ const $nodes = {
     faceShowing: $(".faceshowing"),
     compareShowing: $(".compareshowing"),
     buttonChoice: $(".choice"),
+    butset1: $(".butset1"),
+    butset2: $(".butset2"),
     messageText: $(".message"),
     statsWrong: $(".wrong"),
     statsCorrect: $(".correct")
@@ -220,6 +222,10 @@ function processHigherButton () {
     //         Neither (higher or lower) was true; no guess penalty       
         $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
     }
+    
+    //  make higher lower buttons invisible and make draw button
+    //   visible
+    setButtonVisibility("dvis")
     return;
 }
 //-----------------------------------------------------------------------
@@ -245,6 +251,9 @@ function processLowerButton () {
     //         Neither (higher or lower) was true; no guess penalty       
         $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
     }
+    //  make higher lower buttons invisible and make draw button
+    //   visible
+    setButtonVisibility("dvis")
     return;
 }
 //-----------------------------------------------------------------------
@@ -337,13 +346,18 @@ function processDraw (data) {
     cardsleftInDeck = data.remaining
   
     // save card values to 2 dimensional table (face card, compare card)
-        cardValues[0][1] = cardValues[1][1]
-        cardValues[0][2] = cardValues[1][2]
-        saveCard1Draw(1,data)
-        renderCard (0, "face")
-        renderCard (1, "back")
-        return
-}   
+    cardValues[0][1] = cardValues[1][1]
+    cardValues[0][2] = cardValues[1][2]
+    saveCard1Draw(1,data)
+    renderCard (0, "face")
+    renderCard (1, "back")
+
+    //  make draw button invisible and make higher lower buttons
+    //   visible
+    setButtonVisibility("hlvis")
+    return
+}
+
 
 //-----------------------------------------------------------------------
 // process saves card image link and generated compare value for 1 cards drawn
@@ -378,4 +392,23 @@ function saveCard1Draw(arrPos, data) {
                 break;
     }
     return
+}
+
+//-----------------------------------------------------------------------
+// Process buttons sets
+//    -  either buttons:  "higher and lower" should be visbile 
+//                        or "draw" should be visible. Both 
+//                        should not be visable at the same time
+//       values for visible:  hlvis or dvis
+//----------------------------------------------------------------------- 
+
+function setButtonVisibility (visible) {
+
+if (visible === "hlvis") {
+    $nodes.butset1.css("visibility", "visible")
+    $nodes.butset2.css("visibility", "hidden")
+} else if (visible === "dvis") {
+    $nodes.butset1.css("visibility", "hidden")
+    $nodes.butset2.css("visibility", "visible")
+}  else {console.log(`invalid value: ${visible} coded for setButtonVisibility`)}
 }
