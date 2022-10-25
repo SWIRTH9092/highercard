@@ -17,7 +17,7 @@ row 7 - stats    */
 .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2rem 4rem
+    grid-template-rows: 1.6rem 2rem
      2fr 1fr 2rem 2rem 1fr; 
     border: 5px solid #B8141F;
     justify-items: center; 
@@ -25,13 +25,17 @@ row 7 - stats    */
 }
 
 .grid-row-1 {
-    border: 2px dashed blue;
-    background-color: #B8141F
+    width: 100%;
+    /* background-color: #B8141F */
 }
 .grid-row-2 {
     border: 2px dashed green;
     font-size: 2rem;
     font-family: 'Baloo Paaji 2', cursive;
+    display: flex;
+    text-align: center;
+    background: #B8141F;
+    background-color: #B8141F;
 }
 .grid-row-3 {
     border: 2px dashed red;
@@ -64,6 +68,10 @@ row 7 - stats    */
     width:auto;
 }
 .message {
+    text-align: center;
+}
+
+.title {
     text-align: center;
 }
 

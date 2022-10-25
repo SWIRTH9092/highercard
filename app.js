@@ -1,30 +1,26 @@
 //  Game info stored in one object
 
-const gameInfo = {
-        stats: { 
-            correctGuesses: 0,
-            wrongGuesses: 0,
+const hlGame = {
+    deck: {
+        deckID: "new",
+        drawNo: 2,
+        cardsleftInDeck: 50,
+        faceCardLink: "",
+        faceCardCompareValue: "",
+        compareCardLink: "",
+        compareCardCompareValue: "",
+    },    
+    stats: { 
+            accumCorrectGuesses: 0,
+            accumWrongGuesses: 0,
         }
 }
-//   Card [0] - card displayed
-//     0 - array position
-//     1 - image link
-//     2 - compareValue
-//   Card [1] = card face down or face up
-//     0 - array position
-//     1 - image link
-//     2 - compareValue
-let cardValues = [
-    [0, "xxxx", 1],
-    [1, "yyyy", 2]
-];
 
-//  define guess Stats
+// current games win-loss stats
 let correctGuesses = 0;
 let wrongGuesses = 0;
 
 //  Define Jquery  variables
-
 const $nodes = {
     faceShowing: $(".faceshowing"),
     compareShowing: $(".compareshowing"),
@@ -37,100 +33,181 @@ const $nodes = {
 }
 
 //default is New, first draw is 2
-let deckID = "new" 
 let drawNo = 2 
 let cardsleftInDeck = 52
 
-let draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo}`
-let shuffle = `https://deckofcardsapi.com/api/deck/${deckID}/shuffle`
+let draw = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/draw/?count=${hlGame.deck.drawNo}`
+let shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/shuffle`
 
 //-----------------------------------------------------------------------
-//    function:  getCardDeck() is executed to get the API data for the 
+// Retrieve from Local Storage
+//-----------------------------------------------------------------------
+function loadStats () {
+
+    const hlJSON = localStorage.getItem("hlstats")
+    
+    // if jlSON is undefined  - it is false and will not run
+    if (hlJSON) {    
+        return JSON.parse("hlJSON")
+    }  
+
+    []   // will only run if jlJSON is false
+    
+    }
+
+//-----------------------------------------------------------------------
+//    function:  getInitialCardDeck() is executed to get the API data for the 
 //               initial window.  This function executes with a default
 //               setting of "new" for card deck and draws 2 cards
 //-----------------------------------------------------------------------
 
-getCardDeck()
+// loadStats()
+// console.log(hlJSON)
+getInitialCardDeck()
 
 
 //-----------------------------------------------------------------------
 //  executes API call to get the data
+//   - checks for end of deck 
+//     - can occur if card remaining = 0 at end of previous game
+//     - can occur if card remaining = 0 in current game
+//  - shuffle deck will fail if card deck no longer exists
+//    - card decks are deleted after two weeks
+//    
 //-----------------------------------------------------------------------
-function getCardDeck() {
-    // make api call
-    $.ajax(draw)
-    .then(
-        (drawData) => {
-        console.log(drawData)
-        processDeck(drawData)
-        },
-        (error) => {
-            console.log("error:", error)
-        })
-    return;
-} 
+function getInitialCardDeck() {
+
+    // if zero cards remaining in deck, shuffle to get drawn cards back
+    //    will use nested API calls to keep in sync...   
+    if (hlGame.deck.cardsleftInDeck === 0) {
+        //   if no cards left in deck
+        //       on restart - draw to get a new deck automatically
+
+        //  reset deckID and drawNo to defaults for new deck and save the updated draw API call
+        hlGame.deck.deckID = "new"
+        hlGame.deck.drawNo = 2
+        draw = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/draw/?count=${hlGame.deck.drawNo}`
+    
+        // API call for new deck - draw 2
+        $.ajax(draw)
+            .then(
+                (drawData) => {
+                    // check for draw success - failure will only occur if website is not available
+                    if (drawData.success !== true){
+                        $nodes.messageText.text("01 - API call website unavailable, please try again later.")
+                        console.log("01 - error", drawData)
+                        return;
+                    } else { 
+                        // call was successful so process the deck for the window
+                        processDeck(drawData);
+                    }
+                },
+                (error) => {
+                     // failure should only occur if website is not available
+                    $nodes.messageText.text("02 - API call website unavailable, please try again later.")
+                    console.log("02 - error:", error)
+                    return;
+                })
+    } else {
+        // execute API - decked and drawNo taken from JSON file load
+        // make api call
+        draw = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/draw/?count=${hlGame.deck.drawNo}`
+        // make api call        
+        $.ajax(draw)
+                .then(
+                (drawData) => {
+                    // failure should only occur if website is not available
+                    if (drawData.success !== true){
+                        $nodes.messageText.text("03 - API call website unavailable, please try again later.");
+                        console.log("03 - error", drawData);
+                        return;
+                    } else { 
+                        // call was successful so process the deck for the window
+                        processDeck(drawData); 
+                    }
+                    },
+                (error) => {
+                    // failure should only occur if website is not available
+                    $nodes.messageText.text("04 - API call website unavailable, please try again later.");
+                    console.log("04 - error", drawData);
+                    return;
+                })
+        }
+         } 
+
 
 //-----------------------------------------------------------------------
 // process Deck Data from initial API call
 //-----------------------------------------------------------------------
 function processDeck (data) {
 
-    // check API call sucess
-    if (data.success !== true) {
-        console.log("unsuccesful API call")
-        return
-    }
+    // save card values
+    saveCard(data, hlGame.deck.drawNo)
+    renderCard (0, "face")
+    renderCard (1, "back")
 
     //  sets defauls for future calls.  
     //     - Next API will draw from the current deck
     //     - 1 card for will drawn (inital draw from a deck requires 2 cards)
-
-    deckID = data.deck_id   //next API will draw from the current deck
-    drawNo = 1
-    cardsleftInDeck = data.remaining
-    draw = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${drawNo}`
-  
-    // save card values to 2 dimensional table (face card, compare card)
-        saveCard(0,data) 
-        saveCard(1,data)
-        renderCard (0, "face")
-        renderCard (1, "back")
+    hlGame.deck.deckID = data.deck_id   //next API will draw from the current deck
+    hlGame.deck.drawNo = 1
+    hlGame.deck.cardsleftInDeck = data.remaining
+    draw = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/draw/?count=${hlGame.deck.drawNo}`
+    
     return;
 }   
 
 //-----------------------------------------------------------------------
-// process saves card image link and generated compare value for 2 cards drawn
+// Save card info - put in Object for Json
 //-----------------------------------------------------------------------
-//  save the card values in array
-//      arrPos - 0 - face card values
-//               1 - compare card values
-
-function saveCard(arrPos, data) {
-//  save image link
-    cardValues [arrPos][1] = (data.cards[arrPos].image)
-
+//  Call paramaters
+//      data - event data from API call
+//      drawNo - Number of cards drawn     
+function saveCard(data, drawNo) {
+//  save image link and genereate
+      if (drawNo === 2) {
+       // if draw 2, save face card and compare card from API Event data
+       hlGame.deck.faceCardLink = data.cards[0].image;
+       hlGame.deck.faceCardCompareValue = generateCompareValue (data.cards[0].value);
+       hlGame.deck.compareCardLink = data.cards[1].image;
+       hlGame.deck.compareCardCompareValue = generateCompareValue (data.cards[1].value);
+    }  else {
+       // draw 1, move compare card information to face card and save new compare card info from
+       //     from API event data
+       hlGame.deck.faceCardLink = hlGame.deck.compareCardLink;
+       hlGame.deck.faceCardCompareValue = hlGame.deck.compareCardCompareValue;
+       hlGame.deck.compareCardLink = data.cards[0].image;
+       hlGame.deck.compareCardCompareValue = generateCompareValue (data.cards[0].value);
+    }
+    return 0
+}
+//-----------------------------------------------------------------------
+// generate Compare Value
+//-----------------------------------------------------------------------
+//  Call paramaters
+//     card value to generate the compare value for
+ function generateCompareValue(cardValue) {
 // set card compare value
-    switch (data.cards[arrPos].value) {
+    switch (cardValue) {
             case "ACE":
-                cardValues[arrPos] [2] = (14);
+                return 14;
                 break;
             case "KING":
-                cardValues[arrPos] [2] = (13);
+                return 13;
                 break;
             case "QUEEN":
-                cardValues[arrPos] [2] = (12);
+                return 12;
                 break;
             case "JACK":
-                cardValues[arrPos] [2] = (11);
+                return 11;
                 break;
             case "10":
-                cardValues[arrPos] [2] = (10);
+                return 10;
                     break;
             default:
-                cardValues[arrPos] [2] = ('0' + data.cards [arrPos].value);
+                return (cardValue);
                 break;
     }
-return;
 }
 
 //-----------------------------------------------------------------------
@@ -146,11 +223,11 @@ return;
 //-----------------------------------------------------------------------
 function renderCard (cardNo, type) {
     if (cardNo === 0) {
-        $nodes.faceShowing.attr("src", cardValues [cardNo] [1]) 
+        $nodes.faceShowing.attr("src", hlGame.deck.faceCardLink) 
     } else if (type === "back") {
         $nodes.compareShowing.attr("src", "/images/cardback.png")       
     } else {
-        $nodes.compareShowing.attr("src", cardValues[cardNo] [1])     
+        $nodes.compareShowing.attr("src", hlGame.deck.compareCardLink)     
     } 
     return;  
 }
@@ -206,17 +283,18 @@ $nodes.buttonChoice.on ("click", (event) => {
 function processHigherButton () {
     
     //  if face card value < compare card value, higher guess was "wrong"
-    if (cardValues[0][2] > cardValues[1][2]) {
+    if (hlGame.deck.faceCardCompareValue > hlGame.deck.compareCardCompareValue) {
         $nodes.messageText.text("Your guess of 'higher' was incorrect. Try again by  clicking on Draw to continue.")
         wrongGuesses += 1
-        updateStatsMessage()
+        hlGame.stats.accumWrongGuesses += 1
+        updateStatsMessage() 
 
     //  if face card value > compare card value, higher guess was "correct"  
-    } else if (cardValues[0][2] < cardValues[1][2]) {
+    } else if (hlGame.deck.faceCardCompareValue < hlGame.deck.compareCardCompareValue) {
         $nodes.messageText.text("Congratulations.  Your guess of 'higher' was correct.  Click on Draw to continue.")
         correctGuesses += 1
+        hlGame.stats.accumCorrectGuesses += 1
         updateStatsMessage()
-
     } else {
     //  if face card value = compare card value - 
     //         Neither (higher or lower) was true; no guess penalty       
@@ -235,15 +313,17 @@ function processHigherButton () {
 function processLowerButton () {
 
     //  if face card value < compare card value, lower guess was "correct"
-    if (cardValues[0][2] > cardValues[1][2]) {
+    if (hlGame.deck.faceCardCompareValue  > hlGame.deck.compareCardCompareValue) {
         $nodes.messageText.text("Congratulations.  Your guess of 'lower' was correct.  Click on Draw to continue.")
         correctGuesses += 1
+        hlGame.stats.accumCorrectGuesses += 1
         updateStatsMessage()
 
     //  if face card value > compare card value, lower guess was "incorrect"  
-    } else if (cardValues[0][2] < cardValues[1][2]) {
+    } else if (hlGame.deck.faceCardCompareValue  < hlGame.deck.compareCardCompareValue) {
         $nodes.messageText.text("Your guess of 'lower' was incorrect. Try again by  clicking on Draw to continue.")
         wrongGuesses += 1
+        hlGame.stats.accumWrongGuesses += 1
         updateStatsMessage()
 
     } else {
@@ -254,6 +334,7 @@ function processLowerButton () {
     //  make higher lower buttons invisible and make draw button
     //   visible
     setButtonVisibility("dvis")
+    saveStats()
     return;
 }
 //-----------------------------------------------------------------------
@@ -264,34 +345,39 @@ function processDrawButton () {
     // If at end of deck, reshuffle the deck
         // if zero cards remaining in deck, shuffle to get drawn cards back
         //    will use nested API calls to keep in sync...   
-        if (cardsleftInDeck === 0) {
+        if (hlGame.deck.cardsleftInDeck === 0) {
             // save deckid in shuffle
-            shuffle = `https://deckofcardsapi.com/api/deck/${deckID}/shuffle`
+            shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deck.deckID}/shuffle`
             // make API call to shuffle deck
             $.ajax(shuffle)
              .then(
                  (shuffleData) => {
                     if (shuffleData.success !== true) {
-                     console.log("01 - unsuccesful API call for Shuffle")
-                     return
+                     console.log("05 - unsuccesful API call for Shuffle", shuffleData)
+                     console.log("apishuffle call", shuffle)
+                     return;
                     } else {
                         // execute API call to draw 1 card - preset after initial draw
                         // make api call
                         $.ajax(draw)
                         .then(
-                            (drawData) => {
-                            processDraw(drawData)
+                            (drawData) => {    
+                        // successful API call
+                        //  execute ProcessDeck to load the data to the screen
+                        //  Change button Visiability for Higher & lower to be visiable
+                            processDeck(drawData)
+                            setButtonVisibility("hlvis")
                             return;
                             },
                             (error) => {
-                                console.log("02 - error:", error)
+                                console.log("06 - error:", error)
                                 return;
                             })
                         return;
                     }
                 },              
                 (error) => {
-                    console.log("03 - error:", error)
+                    console.log("07 - error:", error)
                     return
                 })
          } 
@@ -305,10 +391,14 @@ function processDrawButton () {
                         // check API call sucess
                      if (drawData.success !== true) {
                         console.log("unsuccesful API call")
-                        console.log("cardsLeftInDeck", cardsleftInDeck)
+                        console.log("11-drawData",drawData)
                         return
                     } else {
-                        processDraw(drawData)
+                        // successful API call
+                        //  execute ProcessDeck to load the data to the screen
+                        //  Change button Visiability for Higher & lower to be visiable
+                        processDeck(drawData)
+                        setButtonVisibility("hlvis")
                         return;
                     }      
                 },
@@ -322,8 +412,6 @@ function processDrawButton () {
 }
 
 
-
-
 //-----------------------------------------------------------------------
 // Update Stats Messages
 //-----------------------------------------------------------------------
@@ -335,65 +423,26 @@ function updateStatsMessage() {
 }
 
 //-----------------------------------------------------------------------
-// process Deck Data from initial API call
+// Update to Local Storage
 //-----------------------------------------------------------------------
-function processDraw (data) {
+function saveStats () {
 
-    //  sets defauls for future calls.  
-    //     - Next API will draw from the current deck
-    //     - 1 card for will drawn (inital draw from a deck requires 2 cards)
+// const hlJSON = JSON.string (statsArr)
+// localStorage.setItem("hlstats", "hlJSON")
+return;
 
-    cardsleftInDeck = data.remaining
-  
-    // save card values to 2 dimensional table (face card, compare card)
-    cardValues[0][1] = cardValues[1][1]
-    cardValues[0][2] = cardValues[1][2]
-    saveCard1Draw(1,data)
-    renderCard (0, "face")
-    renderCard (1, "back")
-
-    //  make draw button invisible and make higher lower buttons
-    //   visible
-    setButtonVisibility("hlvis")
-    return
 }
 
-
 //-----------------------------------------------------------------------
-// process saves card image link and generated compare value for 1 cards drawn
+// Retrieve from Local Storage
 //-----------------------------------------------------------------------
-//  save the card values in array
-//      arrPos - 0 - face card values
-//               1 - compare card values
+function loadStats () {
 
-function saveCard1Draw(arrPos, data) {
-//  save image link
-    cardValues [arrPos][1] = (data.cards[0].image)
-
-// set card compare value
-    switch (data.cards[0].value) {
-            case "ACE":
-                cardValues[arrPos] [2] = (14);
-                break;
-            case "KING":
-                cardValues[arrPos] [2] = (13);
-                break;
-            case "QUEEN":
-                cardValues[arrPos] [2] = (12);
-                break;
-            case "JACK":
-                cardValues[arrPos] [2] = (11);
-                break;
-            case "10":
-                cardValues[arrPos] [2] = (10);
-                    break;
-            default:
-                cardValues[arrPos] [2] = ('0' + data.cards [0].value);
-                break;
+    // const hlJSON = JSON.string (statsArr)
+    // localStorage.setItem("hlstats", "hlJSON")
+    
     }
-    return
-}
-
+    
 //-----------------------------------------------------------------------
 // Process buttons sets
 //    -  either buttons:  "higher and lower" should be visbile 
