@@ -1,6 +1,5 @@
 //  Game info stored in one object
 const hlGameDefaults = {
-    
         deckID: "new",
         drawNo: 2,
         cardsleftInDeck: 50,
@@ -15,11 +14,9 @@ const hlGameDefaults = {
 //-----------------------------------------------------------------------
 // Retrieve from Local Storage
 //-----------------------------------------------------------------------
-
 function loadLocalStorageData () {
 
         const hlJSON = localStorage.getItem("hlgame")
-        // console.log("hlJSON", hlJSON)
         // if undefined is false, it is not going to run 
         if (hlJSON) {
             return JSON.parse(hlJSON)
@@ -42,12 +39,10 @@ const $nodes = {
     butset2: $(".butset2"),
     messageText: $(".message"),
     statsWrong: $(".wrong"),
-    statsCorrect: $(".correct")
+    statsCorrect: $(".correct"),
+    accStatsWrong: $(".accwrong"),
+    accStatsCorrect: $("acccorrect")
 }
-
-//default is New, first draw is 2
-let drawNo = 2 
-let cardsleftInDeck = 52
 
 let draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
 let shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/shuffle`
@@ -411,8 +406,11 @@ function processDrawButton () {
 //-----------------------------------------------------------------------
 
 function updateStatsMessage() {
-    $nodes.statsCorrect.text(`Correct Guesses: ${correctGuesses}`)
-    $nodes.statsWrong.text(`Wrong Guesses: ${wrongGuesses}`)
+    $nodes.statsCorrect.text(`Current: Correct Guesses: ${correctGuesses}`)
+    $nodes.statsWrong.text(`Current: Wrong Guesses: ${wrongGuesses}`)
+    $nodes.accStatsCorrect.text(`Accumulatve: Correct Guesses: ${hlGame.accumCorrectGuesses}`)
+    $nodes.accStatsWrong.text(`Accumulatve: Wrong Guesses: ${hlGame.accumWrongGuesses}`)
+
     return
 }
 
