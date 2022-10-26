@@ -24,7 +24,7 @@ row 7 - stats    */
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0fr 1fr
-     1.75fr 3rem 2rem 2rem 6rem; 
+     1.75fr 3rem 2rem 6rem 2rem; 
     /* border: 5px solid #B8141F; */
     justify-items: center; 
     align-items:  center;
@@ -64,19 +64,15 @@ row 7 - stats    */
 }
 .grid-row-5 {
     grid-area: 5 / 1 / 5 / 1;
-    border: 2px dashed green; 
-  
+    transition-duration: 5s;
     display: inline; 
 }
 .grid-row-6 {
     grid-area: 6 / 1 / 6 / 1;
-    border: 2px dashed red;
+    line-height: 2px;
 }
 .grid-row-7 {
     grid-area: 7 / 1 / 7 / 1;
-    border: 2px dashed blue;
-    line-height: 2px;
-
 }
 
 .faceshowing {
@@ -96,6 +92,14 @@ row 7 - stats    */
     text-align: center;
 }
 
+button {
+    color:#D4EDF7;
+    background-color: #B8141F;
+    border: 2px solid #083445;
+}
+
 .draw {
     visibility: hidden;
+    color: #D4EDF7;
+    background-color:#B8141F
 }

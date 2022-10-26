@@ -75,7 +75,7 @@ function getInitialCardDeck() {
 
     // if zero cards remaining in deck, shuffle to get drawn cards back
     //    will use nested API calls to keep in sync...   
-    if (hlGame.cardsleftInDeck === 0) {
+    if (hlGame.cardsleftInDeck < 10) {
         //   if no cards left in deck
         //       on restart - draw to get a new deck automatically
 
@@ -337,7 +337,7 @@ function processDrawButton () {
     // If at end of deck, reshuffle the deck
         // if zero cards remaining in deck, shuffle to get drawn cards back
         //    will use nested API calls to keep in sync...   
-        if (hlGame.cardsleftInDeck === 0) {
+        if (hlGame.cardsleftInDeck < 10) {
             // save deckid in shuffle
             shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/shuffle`
             // make API call to shuffle deck
@@ -359,6 +359,7 @@ function processDrawButton () {
                         //  Change button Visiability for Higher & lower to be visiable
                             processDeck(drawData)
                             setButtonVisibility("hlvis")
+                            drawMessage ()
                             return;
                             },
                             (error) => {
@@ -391,6 +392,7 @@ function processDrawButton () {
                         //  Change button Visiability for Higher & lower to be visiable
                         processDeck(drawData)
                         setButtonVisibility("hlvis")
+                        drawMessage ()
                         return;
                     }      
                 },
@@ -439,8 +441,13 @@ function setButtonVisibility (visible) {
 if (visible === "hlvis") {
     $nodes.butset1.css("visibility", "visible")
     $nodes.butset2.css("visibility", "hidden")
-} else if (visible === "dvis") {
+ } else if (visible === "dvis") {
     $nodes.butset1.css("visibility", "hidden")
     $nodes.butset2.css("visibility", "visible")
-}  else {console.log(`invalid value: ${visible} coded for setButtonVisibility`)}
+ }  else {console.log(`invalid value: ${visible} coded for setButtonVisibility`)}
+}
+
+function drawMessage () {
+    console.log("you are in drawMessage")
+    $nodes.messageText.text('Do you think the next card will be "Higher or "Lower"? Click a button to find out!')
 }
