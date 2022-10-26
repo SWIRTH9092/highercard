@@ -24,7 +24,7 @@ row 7 - stats    */
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0fr 1fr
-     1.75fr 3gorem 2rem 2rem 6rem; 
+     1.75fr 3rem 2rem 2rem 6rem; 
     /* border: 5px solid #B8141F; */
     justify-items: center; 
     align-items:  center;

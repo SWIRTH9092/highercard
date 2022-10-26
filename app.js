@@ -41,7 +41,7 @@ const $nodes = {
     statsWrong: $(".wrong"),
     statsCorrect: $(".correct"),
     accStatsWrong: $(".accwrong"),
-    accStatsCorrect: $("acccorrect")
+    accStatsCorrect: $(".acccorrect")
 }
 
 let draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
@@ -49,11 +49,15 @@ let shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/shuffle`
 
 
 //-----------------------------------------------------------------------
-//    function:  getInitialCardDeck() is executed to get the API data for the 
-//               initial window.  This function executes with a default
-//               setting of "new" for card deck and draws 2 cards
+//    functions:     
+//               - UpdateStatsMessage is to load stats from local storage 
+//               - getInitialCardDeck() is executed to get the API data
+//                 for the initial window.  This function executes with
+//                 a default setting of "new" for card deck and draws 2 
+//                 cards
 //-----------------------------------------------------------------------
 
+updateStatsMessage()
 getInitialCardDeck()
 
 
@@ -143,8 +147,7 @@ function processDeck (data) {
     hlGame.drawNo = 1
     hlGame.cardsleftInDeck = data.remaining
     draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
-    saveLocalStorageData()
-    return;
+     return;
 }   
 
 //-----------------------------------------------------------------------
@@ -410,7 +413,7 @@ function updateStatsMessage() {
     $nodes.statsWrong.text(`Current: Wrong Guesses: ${wrongGuesses}`)
     $nodes.accStatsCorrect.text(`Accumulatve: Correct Guesses: ${hlGame.accumCorrectGuesses}`)
     $nodes.accStatsWrong.text(`Accumulatve: Wrong Guesses: ${hlGame.accumWrongGuesses}`)
-
+    saveLocalStorageData()
     return
 }
 
@@ -420,6 +423,7 @@ function updateStatsMessage() {
 function saveLocalStorageData () {
     const hlJSON = JSON.stringify(hlGame);
     localStorage.setItem("hlgame", hlJSON)
+    console.log('hlgame', hlGame)
 }
   
 //-----------------------------------------------------------------------
