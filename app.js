@@ -62,7 +62,7 @@ getInitialCardDeck()
 
 
 //-----------------------------------------------------------------------
-//  loads Data from Local Storage - if it exists
+//  Uses Data from Local Storage - if it exists
 // executes API call to get the data
 //   - checks for end of deck 
 //     - can occur if card remaining = 0 at end of previous game
@@ -151,11 +151,14 @@ function processDeck (data) {
 }   
 
 //-----------------------------------------------------------------------
-// Save card info - put in Object for Json
+// Save card info - put in an Object that will be saved to local
+//    Storage
 //-----------------------------------------------------------------------
 //  Call paramaters
-//      data - event data from API call
-//      drawNo - Number of cards drawn     
+//      data - event data from API call 
+//      drawNo - Number of cards drawn (draw 2 only happens at beginning
+//             of the game and if either no local storage or deck no longer
+//             exists)   
 function saveCard(data, drawNo) {
 //  save image link and genereate
       if (drawNo === 2) {
@@ -207,12 +210,12 @@ function saveCard(data, drawNo) {
 // loads card data to screen
 //    2 input paramaters: 
 //      1 - card no
-//          0 - face card (array number 0 in cardValues array)
-//          1 - compare card (array number 1 in cardValues array
+//          0 - face card 
+//          1 - compare card 
 //      2 )  type
-//          - "face" - display the card face  (card 0 always displayed the face)
-//          - "back" - display an image of the back of the card (card 1 can display
-//                     either the front or back)
+//          - "face" - display the card face  (card 0 always displays the face)
+//          - "back" - display an image of the back of the card (card 1 
+//            can display either the front or back)
 //-----------------------------------------------------------------------
 function renderCard (cardNo, type) {
     if (cardNo === 0) {
@@ -233,8 +236,6 @@ function renderCard (cardNo, type) {
 //       if face card is lower
 //   3 - draw button - draws next card
 //-----------------------------------------------------------------------
-
-
 $nodes.buttonChoice.on ("click", (event) => {
 
     // stops the screen from refreshing
@@ -407,7 +408,7 @@ function processDrawButton () {
 
 
 //-----------------------------------------------------------------------
-// Update Stats Messages
+// Update Stats Messages on page and save to local storage
 //-----------------------------------------------------------------------
 
 function updateStatsMessage() {
@@ -425,8 +426,7 @@ function updateStatsMessage() {
 function saveLocalStorageData () {
     const hlJSON = JSON.stringify(hlGame);
     localStorage.setItem("hlgame", hlJSON)
-    console.log('hlgame', hlGame)
-}
+ }
   
 //-----------------------------------------------------------------------
 // Process buttons sets
@@ -447,7 +447,10 @@ if (visible === "hlvis") {
  }  else {console.log(`invalid value: ${visible} coded for setButtonVisibility`)}
 }
 
+//-----------------------------------------------------------------------
+// Update the message on screen to click on the higher or lower button
+//----------------------------------------------------------------------- 
+
 function drawMessage () {
-    console.log("you are in drawMessage")
     $nodes.messageText.text('Do you think the next card will be "Higher or "Lower"? Click a button to find out!')
 }

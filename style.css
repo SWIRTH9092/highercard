@@ -96,6 +96,7 @@ button {
     color:#D4EDF7;
     background-color: #B8141F;
     border: 2px solid #083445;
+    border-radius: 5px;
 }
 
 .draw {
