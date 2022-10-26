@@ -9,6 +9,7 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 - Javascript
 - Jquery
 - API calls using AJAX
+- Local Storage
 
 
 #### Link to Project

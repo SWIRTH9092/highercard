@@ -4,9 +4,11 @@ const hlGameDefaults = {
         drawNo: 2,
         cardsleftInDeck: 50,
         faceCardLink: "",
+        faceCardFaceValue: "",
         faceCardCompareValue: "",
         compareCardLink: "",
         compareCardCompareValue: "",
+        compareCardFaceValue: "",
         accumCorrectGuesses: 0,
         accumWrongGuesses: 0,
     }
@@ -115,7 +117,8 @@ function getInitialCardDeck() {
                     // failure should only occur if website is not available
                     if (drawData.success !== true){
                         $nodes.messageText.text("03 - API call website unavailable, please try again later.");
-                        console.log("03 - error", drawData);
+                        console.log("Api call - draw", draw)
+                        console.log("03 - error", drawData); 
                         return;
                     } else { 
                         // call was successful so process the deck for the window
@@ -165,15 +168,19 @@ function saveCard(data, drawNo) {
        // if draw 2, save face card and compare card from API Event data
        hlGame.faceCardLink = data.cards[0].image;
        hlGame.faceCardCompareValue = generateCompareValue (data.cards[0].value);
+       hlGame.faceCardfaceValue = (data.cards[0].value);
        hlGame.compareCardLink = data.cards[1].image;
        hlGame.compareCardCompareValue = generateCompareValue (data.cards[1].value);
+       hlGame.faceCardfaceValue = (data.cards[1].value);
     }  else {
        // draw 1, move compare card information to face card and save new compare card info from
        //     from API event data
        hlGame.faceCardLink = hlGame.compareCardLink;
        hlGame.faceCardCompareValue = hlGame.compareCardCompareValue;
+       hlGame.faceCardFaceValue = hlGame.compareCardFaceValue;
        hlGame.compareCardLink = data.cards[0].image;
        hlGame.compareCardCompareValue = generateCompareValue (data.cards[0].value);
+       hlGame.compareCardFaceValue = (data.cards[0].value);
     }
     return 0
 }
@@ -276,23 +283,23 @@ $nodes.buttonChoice.on ("click", (event) => {
 
 function processHigherButton () {
     
-    //  if face card value < compare card value, higher guess was "wrong"
+    //  if face card value > compare card value, higher guess was "wrong"
     if (hlGame.faceCardCompareValue > hlGame.compareCardCompareValue) {
-        $nodes.messageText.text("Your guess of 'higher' was incorrect. Try again by  clicking on Draw to continue.")
+        $nodes.messageText.text(`'${hlGame.compareCardFaceValue} is less than ${hlGame.faceCardFaceValue}' so your guess of 'higher' was incorrect. Try again by clicking on Draw to continue.`)
         wrongGuesses += 1
         hlGame.accumWrongGuesses += 1
         updateStatsMessage() 
 
-    //  if face card value > compare card value, higher guess was "correct"  
+    //  if face card value < compare card value, higher guess was "correct"  
     } else if (hlGame.faceCardCompareValue < hlGame.compareCardCompareValue) {
-        $nodes.messageText.text("Congratulations.  Your guess of 'higher' was correct.  Click on Draw to continue.")
+        $nodes.messageText.text(`'${hlGame.compareCardFaceValue} is greater than ${hlGame.faceCardFaceValue}' so your guess of 'higher' was correct.  Click on Draw to continue.`)
         correctGuesses += 1
         hlGame.accumCorrectGuesses += 1
         updateStatsMessage()
     } else {
     //  if face card value = compare card value - 
     //         Neither (higher or lower) was true; no guess penalty       
-        $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
+        $nodes.messageText.text(`Both cards are ${hlGame.compareCardFaceValue}'s so neither card was higher or lower.  Click on Draw to continue.`)
     }
     
     //  make higher lower buttons invisible and make draw button
@@ -306,24 +313,23 @@ function processHigherButton () {
 //----------------------------------------------------------------------- 
 function processLowerButton () {
 
-    //  if face card value < compare card value, lower guess was "correct"
+    //  if face card value > compare card value, lower guess was "correct"
     if (hlGame.faceCardCompareValue  > hlGame.compareCardCompareValue) {
-        $nodes.messageText.text("Congratulations.  Your guess of 'lower' was correct.  Click on Draw to continue.")
+        $nodes.messageText.text(`'${hlGame.faceCardFaceValue} is greater than ${hlGame.compareCardFaceValue}' so your guess of 'lower' was correct. Try again by clicking on Draw to continue.`)
         correctGuesses += 1
         hlGame.accumCorrectGuesses += 1
         updateStatsMessage()
 
-    //  if face card value > compare card value, lower guess was "incorrect"  
+    //  if face card value < compare card value, lower guess was "incorrect"  
     } else if (hlGame.faceCardCompareValue  < hlGame.compareCardCompareValue) {
-        $nodes.messageText.text("Your guess of 'lower' was incorrect. Try again by  clicking on Draw to continue.")
+        $nodes.messageText.text(`'${hlGame.faceCardFaceValue} is less than ${hlGame.compareCardFaceValue}' so your guess of 'lower' was incorrect. Try again by clicking on Draw to continue.`)
         wrongGuesses += 1
         hlGame.accumWrongGuesses += 1
         updateStatsMessage()
-
     } else {
     //  if face card value = compare card value - 
     //         Neither (higher or lower) was true; no guess penalty       
-        $nodes.messageText.text("Neither higher or lower.  Click on Draw to continue.")
+    $nodes.messageText.text(`Both cards are ${hlGame.compareCardFaceValue}'s so neither card was higher or lower.  Click on Draw to continue.`)
     }
     //  make higher lower buttons invisible and make draw button
     //   visible
@@ -413,9 +419,9 @@ function processDrawButton () {
 
 function updateStatsMessage() {
     $nodes.statsCorrect.text(`Current: Correct Guesses: ${correctGuesses}`)
-    $nodes.statsWrong.text(`Current: Wrong Guesses: ${wrongGuesses}`)
-    $nodes.accStatsCorrect.text(`Accumulatve: Correct Guesses: ${hlGame.accumCorrectGuesses}`)
-    $nodes.accStatsWrong.text(`Accumulatve: Wrong Guesses: ${hlGame.accumWrongGuesses}`)
+    $nodes.statsWrong.text(`Current: Incorrect Guesses: ${wrongGuesses}`)
+    $nodes.accStatsCorrect.text(`To Date: Correct Guesses: ${hlGame.accumCorrectGuesses}`)
+    $nodes.accStatsWrong.text(`To Date: Incorrect Guesses: ${hlGame.accumWrongGuesses}`)
     saveLocalStorageData()
     return
 }
@@ -452,5 +458,5 @@ if (visible === "hlvis") {
 //----------------------------------------------------------------------- 
 
 function drawMessage () {
-    $nodes.messageText.text('Do you think the next card will be "Higher or "Lower"? Click a button to find out!')
+    $nodes.messageText.text('Do you think the next card will be "Higher or "Lower"? An Ace is the highest card. Click a button to find out!')
 }
