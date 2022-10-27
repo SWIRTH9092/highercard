@@ -7,25 +7,23 @@
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="app.js" defer></script>
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Card Higher</title>
 </head>
 <body>
     <div class="grid-container">
         <div class="grid-row-1"></div>  
         <div class="grid-row-2">
-            <p class="title"> Higher or Lower</p>
+            <p class="title">Which Card is Higher?</p>
         </div>
         <div class="grid-row-3">
-            <img class="faceshowing play">
-            <img class="compareshowing play" src="/images/cardback.png">
+            <img class="faceshowing play imagechoice">
+            <img class="compareshowing play imagechoice" src="/images/cardback.png">
         </div>  
         <div class="grid-row-4">
-            <h4 class="message play">Do you think the next card will be "Higher or "Lower"? An Ace is the highest card. Click a button to find out!</h4>
+            <button type=button class="draw play choice butset2">Draw</button>
         </div>
         <div class="grid-row-5">
-             <button type=button class="higher play choice butset1">Higher</button>
-             <button type=button class="draw play choice butset2">Draw</button>
-            <button type=button class="lower play choice butset1">Lower</button>
+            <h4 class="message play">Click on the Card Image to chose the Higher Card. Ace's are the highest card!</h4>
         </div>
         <div class="grid-row-6" stat-container>
             <p class="stats correct play">Current: Correct Guesses: 0</p>

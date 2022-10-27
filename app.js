@@ -36,8 +36,8 @@ let wrongGuesses = 0;
 const $nodes = {
     faceShowing: $(".faceshowing"),
     compareShowing: $(".compareshowing"),
-    buttonChoice: $(".choice"),
-    butset1: $(".butset1"),
+    imageChoice: $(".imagechoice"),
+    buttonChoice: $(".draw"),
     butset2: $(".butset2"),
     messageText: $(".message"),
     statsWrong: $(".wrong"),
@@ -85,7 +85,7 @@ function getInitialCardDeck() {
         hlGame.deckID = "new"
         hlGame.drawNo = 2
         draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
-    
+        console.log("draw API", draw)
         // API call for new deck - draw 2
         $.ajax(draw)
             .then(
@@ -135,8 +135,22 @@ function getInitialCardDeck() {
     } 
 //-----------------------------------------------------------------------
 // process Deck Data from initial API call
+//  add event listener for images
 //-----------------------------------------------------------------------
 function processDeck (data) {
+
+
+//-----------------------------------------------------------------------
+// event Listener for images
+//   1 - face card -  Is face card higher than the compare card?
+//   2 - compare card - Is compare card higher than the face card?
+//-----------------------------------------------------------------------
+
+$nodes.imageChoice.on ("click", (event) => {
+    // stops the screen from refreshing
+    event.preventDefault()
+    processImageEventListener(event)
+ })
 
     // save card values
     saveCard(data, hlGame.drawNo)
@@ -236,12 +250,7 @@ function renderCard (cardNo, type) {
 }
      
 //-----------------------------------------------------------------------
-// event Listener for buttons
-//   1 - higher button -  will compare face card to compare card to see 
-//       if face card is higher
-//   2 - lower button - will compare face card to compare card to see 
-//       if face card is lower
-//   3 - draw button - draws next card
+// event Listener for draw button - draws the next card
 //-----------------------------------------------------------------------
 $nodes.buttonChoice.on ("click", (event) => {
 
@@ -253,93 +262,20 @@ $nodes.buttonChoice.on ("click", (event) => {
 
     //  verifies this click was for a button
     //  bypass all clicks not for a button
+    console.log(event)
     if ($buttonChoiceEvent.target.nodeName !== 'BUTTON') {
         return
     }
-    
-    //  Determine which button was clicked: higher, lower or draw
-    switch ($buttonChoiceEvent.target.innerText) {
-        case "Higher":
-            renderCard (1, "face")
-            processHigherButton()
-            break;
-        case "Lower":
-            renderCard (1, "face")
-            processLowerButton()
-            break;
-        case "Draw":
-            processDrawButton()
-            break;
-        default:
-            console.log("invalid button found")
-            break;
-    }
-    return;
+    processDrawButton()
 })
-//-----------------------------------------------------------------------
-// Process Higher Button 
-//    -  was the face card value > compare card value? (guess correct?)
-//-----------------------------------------------------------------------
 
-function processHigherButton () {
-    
-    //  if face card value > compare card value, higher guess was "wrong"
-    if (hlGame.faceCardCompareValue > hlGame.compareCardCompareValue) {
-        $nodes.messageText.text(`'${hlGame.compareCardFaceValue} is less than ${hlGame.faceCardFaceValue}' so your guess of 'higher' was incorrect. Try again by clicking on Draw to continue.`)
-        wrongGuesses += 1
-        hlGame.accumWrongGuesses += 1
-        updateStatsMessage() 
-
-    //  if face card value < compare card value, higher guess was "correct"  
-    } else if (hlGame.faceCardCompareValue < hlGame.compareCardCompareValue) {
-        $nodes.messageText.text(`'${hlGame.compareCardFaceValue} is greater than ${hlGame.faceCardFaceValue}' so your guess of 'higher' was correct.  Click on Draw to continue.`)
-        correctGuesses += 1
-        hlGame.accumCorrectGuesses += 1
-        updateStatsMessage()
-    } else {
-    //  if face card value = compare card value - 
-    //         Neither (higher or lower) was true; no guess penalty       
-        $nodes.messageText.text(`Both cards are ${hlGame.compareCardFaceValue}'s so neither card was higher or lower.  Click on Draw to continue.`)
-    }
-    
-    //  make higher lower buttons invisible and make draw button
-    //   visible
-    setButtonVisibility("dvis")
-    return;
-}
-//-----------------------------------------------------------------------
-// Process Lower Button 
-//    -  was the face card value > compare card value? (guess correct?)
-//----------------------------------------------------------------------- 
-function processLowerButton () {
-
-    //  if face card value > compare card value, lower guess was "correct"
-    if (hlGame.faceCardCompareValue  > hlGame.compareCardCompareValue) {
-        $nodes.messageText.text(`'${hlGame.faceCardFaceValue} is greater than ${hlGame.compareCardFaceValue}' so your guess of 'lower' was correct. Try again by clicking on Draw to continue.`)
-        correctGuesses += 1
-        hlGame.accumCorrectGuesses += 1
-        updateStatsMessage()
-
-    //  if face card value < compare card value, lower guess was "incorrect"  
-    } else if (hlGame.faceCardCompareValue  < hlGame.compareCardCompareValue) {
-        $nodes.messageText.text(`'${hlGame.faceCardFaceValue} is less than ${hlGame.compareCardFaceValue}' so your guess of 'lower' was incorrect. Try again by clicking on Draw to continue.`)
-        wrongGuesses += 1
-        hlGame.accumWrongGuesses += 1
-        updateStatsMessage()
-    } else {
-    //  if face card value = compare card value - 
-    //         Neither (higher or lower) was true; no guess penalty       
-    $nodes.messageText.text(`Both cards are ${hlGame.compareCardFaceValue}'s so neither card was higher or lower.  Click on Draw to continue.`)
-    }
-    //  make higher lower buttons invisible and make draw button
-    //   visible
-    setButtonVisibility("dvis")
-    return;
-}
 //-----------------------------------------------------------------------
 // Process Draw Button
 //----------------------------------------------------------------------- 
 function processDrawButton () {
+
+    // reset image borders on card selected
+    resetImageBorders() 
 
     // If at end of deck, reshuffle the deck
         // if zero cards remaining in deck, shuffle to get drawn cards back
@@ -365,7 +301,7 @@ function processDrawButton () {
                         //  execute ProcessDeck to load the data to the screen
                         //  Change button Visiability for Higher & lower to be visiable
                             processDeck(drawData)
-                            setButtonVisibility("hlvis")
+                            setButtonVisibility(false)
                             drawMessage ()
                             return;
                             },
@@ -398,7 +334,7 @@ function processDrawButton () {
                         //  execute ProcessDeck to load the data to the screen
                         //  Change button Visiability for Higher & lower to be visiable
                         processDeck(drawData)
-                        setButtonVisibility("hlvis")
+                        setButtonVisibility(false)
                         drawMessage ()
                         return;
                     }      
@@ -435,22 +371,15 @@ function saveLocalStorageData () {
  }
   
 //-----------------------------------------------------------------------
-// Process buttons sets
-//    -  either buttons:  "higher and lower" should be visbile 
-//                        or "draw" should be visible. Both 
-//                        should not be visable at the same time
-//       values for visible:  hlvis or dvis
+// Process if draw 
+//    -  paramater: visible
+//       - true to show button
+//       - false to hide button    
 //----------------------------------------------------------------------- 
-
 function setButtonVisibility (visible) {
 
-if (visible === "hlvis") {
-    $nodes.butset1.css("visibility", "visible")
-    $nodes.butset2.css("visibility", "hidden")
- } else if (visible === "dvis") {
-    $nodes.butset1.css("visibility", "hidden")
-    $nodes.butset2.css("visibility", "visible")
- }  else {console.log(`invalid value: ${visible} coded for setButtonVisibility`)}
+    if (visible) { $nodes.butset2.css("visibility", "visible")}
+        else {$nodes.butset2.css("visibility", "hidden")}
 }
 
 //-----------------------------------------------------------------------
@@ -458,5 +387,97 @@ if (visible === "hlvis") {
 //----------------------------------------------------------------------- 
 
 function drawMessage () {
-    $nodes.messageText.text('Do you think the next card will be "Higher or "Lower"? An Ace is the highest card. Click a button to find out!')
+    $nodes.messageText.text("Click on the Card Image to chose the Higher Card. Ace's are the highest card!")
+}
+
+
+//-----------------------------------------------------------------------
+// Process listsener for images
+//    Passed Paramater:  event information
+//    two possible images selected
+//       1 - face card -  Is face card higher than the compare card?
+//       2 - compare card - Is compare card higher than the face card?
+//-----------------------------------------------------------------------
+
+function processImageEventListener(event){
+//  create jquery object for event
+    $imageChoiceEvent = event
+
+    // vertifies that an image was clicked
+    if (event.target.nodeName !== 'IMG') {
+        return
+    }
+    // render face down card and process click
+    renderCard (1, "face")
+
+    //  Which card was clicked the face showing card or the compare card?
+    if (event.target.className === "faceshowing play imagechoice") {
+        // Face showing card was selected
+        processFaceCardClicked("face")
+    } else {
+        // compare showing card was selected
+        processFaceCardClicked("compare")
+    }
+}
+
+//-----------------------------------------------------------------------
+// Process the Card which was selected
+//    Passed Paramater:  cardChosen
+//           - "face"  if the face card was chosen higher
+//           - "compare" if the face down card was chosen higher
+//----------------------------------------------------------------------- 
+
+function processFaceCardClicked (cardChosen) {
+    let higherValueChosen, higherValueFaceValue,
+    lowerValueChosen, lowerValueFaceValue;
+    if (cardChosen === 'face') {
+        higherValueChosen = hlGame.faceCardCompareValue;
+        higherValueFaceValue = hlGame.faceCardFaceValue;
+        $nodes.faceShowing.css("border", "5px solid #083445")
+        lowerValueChosen =  hlGame.compareCardCompareValue; 
+        lowerValueFaceValue = hlGame.compareCardFaceValue;
+        }
+    else { 
+        higherValueChosen = hlGame.compareCardCompareValue;
+        higherValueFaceValue = hlGame.compareCardFaceValue;
+        $nodes.compareShowing.css("border", "5px solid #083445")
+        lowerValueChosen =  hlGame.faceCardCompareValue; 
+        lowerValueFaceValue = hlGame.faceCardFaceValue;
+    }
+   
+    //  if higher card value > lower card value, higher guess was "correct"
+    if (higherValueChosen > lowerValueChosen) {
+        $nodes.messageText.text(`You guessed the correct higher card!  Click on Draw to continue.`)
+        correctGuesses += 1
+        hlGame.accumCorrectGuesses += 1
+        updateStatsMessage() 
+
+    //  if higher card value < lower card value, higher guess was "correct"  
+    } else if (higherValueChosen < lowerValueChosen) {
+        $nodes.messageText.text(`You did not guess the correct higher card. Try again by clicking on Draw to continue.`)
+        wrongGuesses += 1
+        hlGame.accumWrongGuesses += 1
+        updateStatsMessage()
+    } else {
+    //  if higher card value = lower card value - 
+    //         Neither (higher or lower) was true; no guess penalty       
+        $nodes.messageText.text(`Both cards are ${higherValueFaceValue}'s so neither card was higher.  Click on Draw to continue.`)
+    }
+    
+    //  make higher lower buttons invisible and make draw button
+    //   visible
+    setButtonVisibility(true)
+    //-----------------------------------------------------------------------
+    // set event handlers for images off
+    //-----------------------------------------------------------------------
+    // $nodes.imageChoice.off() 
+    return;
+}
+//-----------------------------------------------------------------------
+// reset image borders so that no card is selected
+//----------------------------------------------------------------------- 
+
+function resetImageBorders() {
+    $nodes.faceShowing.css("border", "5px solid #D4EDF7")
+    $nodes.compareShowing.css("border", "5px solid #D4EDF7")  
 }
