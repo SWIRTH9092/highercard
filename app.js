@@ -25,6 +25,17 @@ function loadLocalStorageData () {
         }
         return hlGameDefaults
 }
+//-----------------------------------------------------------------------
+// Update Stats Messages on page and save to local storage
+//-----------------------------------------------------------------------
+function updateStatsMessage() {
+    $nodes.statsCorrect.text(`Current: Correct Guesses: ${correctGuesses}`)
+    $nodes.statsWrong.text(`Current: Incorrect Guesses: ${wrongGuesses}`)
+    $nodes.accStatsCorrect.text(`To Date: Correct Guesses: ${hlGame.accumCorrectGuesses}`)
+    $nodes.accStatsWrong.text(`To Date: Incorrect Guesses: ${hlGame.accumWrongGuesses}`)
+    saveLocalStorageData()
+    return
+}
 
 const hlGame = loadLocalStorageData()
 
@@ -48,19 +59,6 @@ const $nodes = {
 
 let draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
 let shuffle = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/shuffle`
-
-
-//-----------------------------------------------------------------------
-//    functions:     
-//               - UpdateStatsMessage is to load stats from local storage 
-//               - getInitialCardDeck() is executed to get the API data
-//                 for the initial window.  This function executes with
-//                 a default setting of "new" for card deck and draws 2 
-//                 cards
-//-----------------------------------------------------------------------
-
-updateStatsMessage()
-getInitialCardDeck()
 
 
 //-----------------------------------------------------------------------
@@ -139,9 +137,8 @@ function getInitialCardDeck() {
 //-----------------------------------------------------------------------
 function processDeck (data) {
 
-
 //-----------------------------------------------------------------------
-// event Listener for images
+// add event Listener for images
 //   1 - face card -  Is face card higher than the compare card?
 //   2 - compare card - Is compare card higher than the face card?
 //-----------------------------------------------------------------------
@@ -150,6 +147,7 @@ $nodes.imageChoice.on ("click", (event) => {
     // stops the screen from refreshing
     event.preventDefault()
     processImageEventListener(event)
+    $nodes.imageChoice.unbind()
  })
 
     // save card values
@@ -165,6 +163,7 @@ $nodes.imageChoice.on ("click", (event) => {
     hlGame.cardsleftInDeck = data.remaining
     draw = `https://deckofcardsapi.com/api/deck/${hlGame.deckID}/draw/?count=${hlGame.drawNo}`
      return;
+   
 }   
 
 //-----------------------------------------------------------------------
@@ -262,11 +261,11 @@ $nodes.buttonChoice.on ("click", (event) => {
 
     //  verifies this click was for a button
     //  bypass all clicks not for a button
-    console.log(event)
     if ($buttonChoiceEvent.target.nodeName !== 'BUTTON') {
         return
     }
     processDrawButton()
+
 })
 
 //-----------------------------------------------------------------------
@@ -276,6 +275,8 @@ function processDrawButton () {
 
     // reset image borders on card selected
     resetImageBorders() 
+    //turn off event listner for images
+
 
     // If at end of deck, reshuffle the deck
         // if zero cards remaining in deck, shuffle to get drawn cards back
@@ -404,6 +405,7 @@ function processImageEventListener(event){
     $imageChoiceEvent = event
 
     // vertifies that an image was clicked
+   
     if (event.target.nodeName !== 'IMG') {
         return
     }
@@ -418,6 +420,7 @@ function processImageEventListener(event){
         // compare showing card was selected
         processFaceCardClicked("compare")
     }
+
 }
 
 //-----------------------------------------------------------------------
@@ -481,3 +484,15 @@ function resetImageBorders() {
     $nodes.faceShowing.css("border", "5px solid #D4EDF7")
     $nodes.compareShowing.css("border", "5px solid #D4EDF7")  
 }
+
+//-----------------------------------------------------------------------
+//    functions:     
+//               - UpdateStatsMessage is to load stats from local storage 
+//               - getInitialCardDeck() is executed to get the API data
+//                 for the initial window.  This function executes with
+//                 a default setting of "new" for card deck and draws 2 
+//                 cards
+//-----------------------------------------------------------------------
+
+updateStatsMessage()
+getInitialCardDeck()
