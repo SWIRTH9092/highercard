@@ -1,6 +1,6 @@
-# Higher or Lower
+# Higher Card
 
-Will the next card in the deck be higher or lower than the current card?  Note:  if the values are the same, it is a tie
+Which card is higher, the card face up or the the face down.
 
 #### Technology Used
 
@@ -9,7 +9,7 @@ Will the next card in the deck be higher or lower than the current card?  Note: 
 - Javascript
 - Jquery
 - API calls using AJAX
-- Local Storage
+- Local Storage (to save and display Cummulative Stats)
 
 
 #### Link to Project
@@ -44,20 +44,15 @@ https://deckofcardsapi.com/
 
 ![web page 02](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-02-webpage.jpg "Web page 2")
 
-![web page 03](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-03-webpage.jpg "Web page 3")
 
-![[ph page 01]](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-10-phone.jpg "Phone page 1")
+![ph page 01](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-10-phone.jpg "Phone page 1")
 
 ![ph page 02](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-11-phone.jpg "Phone page 2")
 
-![ph page 03](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-12-phone.jpg "Phone page 3")
 
 ### Stretch Objectives
 - add nav menu at top:  
     - Play
-    - Stats 
-        - save stats in JSON file
-        - display culative stats
     - Rules - how to play the game
     - Setup
         - how many cards to be used for higher or lower
