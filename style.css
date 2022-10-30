@@ -15,10 +15,10 @@ Burgendy:   #34091C  */
 row 1 - future menu
 row 2 - title
 row 3 - cards
-row 4 - messages
-row 5 - buttons - higher, lower
-row 6 - button - draw
-row 7 - stats    */
+row 4 - draw button
+row 5 - messages
+row 6 - stats
+row 7 - future   */
 
 .grid-container {
     display: grid;
@@ -101,6 +101,7 @@ row 7 - stats    */
     border-radius: 5px;
     padding: 0 3rem 0 3rem;
     visibility: hidden;
+    pointer-events:  cursor;
 }
 
 button:hover {

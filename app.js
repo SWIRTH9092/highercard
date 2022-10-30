@@ -143,12 +143,12 @@ function processDeck (data) {
 //   2 - compare card - Is compare card higher than the face card?
 //-----------------------------------------------------------------------
 
-$nodes.imageChoice.on ("click", (event) => {
-    // stops the screen from refreshing
-    event.preventDefault()
-    processImageEventListener(event)
-    $nodes.imageChoice.unbind()
- })
+    $nodes.imageChoice.on ("click", (event) => {
+        // stops the screen from refreshing
+        event.preventDefault()
+        processImageEventListener(event)
+        $nodes.imageChoice.unbind()
+    })
 
     // save card values
     saveCard(data, hlGame.drawNo)
