@@ -1,4 +1,4 @@
-# Higher Card
+# Which Card is Higher?
 
 Which card is higher, the card face up or the the face down.
 
