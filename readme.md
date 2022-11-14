@@ -39,14 +39,16 @@ wireframeimages/project1-01-webpage.jpg
 </tr>
 
 <tr>
+    <td>Before Card Draw</td>
     <td> 
-    ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot1-responsive.jpg "Grid")
+        <img src="https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot1-responsive.jpg" height="200">
     <td>
 </tr>
 
 <tr>
-    <td> 
-    ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot2-responsive.jpg "Grid")
+    <td>After Card Draw</td>
+   <td> 
+        <img src="https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot2-responsive.jpg" height="200">
     <td>
 </tr>
 </table>
