@@ -1,11 +1,61 @@
-# Which Card is Higher?
+<div style="text-align: center;">
 
-Which card is higher, the card face up or the the face down.
+### Which Card is Higher?
 
+Created by Sue Wirth
+
+<a href='https://project1-virid-nine.vercel.app/'>Click to Play
+
+LinkedIn: https://www.linkedin.com/in/sue-wirth/
+
+GitHub: https://github.com/SWIRTH9092
+
+</div>
+
+<br>
+####:memo: Description 
+
+Will the next card be higher or lower?   
+<br>
+####:flower_playing_cards: How to Play
+1.  Click on the **card** that you think will be higher (the face up card or the face down card).
+    -   A border will appear around the card selected and the face down card will be revealed.
+    -   A mesage will be displayed as to whether or guess was correct or incorrect.
+    -   The win loss stats will be updated for both current and todate.  Todate stats are saved to local storage after each guess.
+2.  Click on the **Draw Next Card** button
+    -   The card that was face down is moved to the face up position.
+    -   Another card is drawn and placed face down.  Note:  cards are reshuffled when there are 10 cards left in the deck so you never run out of playing cards.
+
+<br>
+
+####Screen Shots
+wireframeimages/project1-01-webpage.jpg
+
+
+<table>
+<tr>
+    <td>Screenshot</td>
+    <td>Description</td>
+</tr>
+
+<tr>
+    <td> 
+    ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot1-responsive.jpg "Grid")
+    <td>
+</tr>
+
+<tr>
+    <td> 
+    ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot2-responsive.jpg "Grid")
+    <td>
+</tr>
+</table>
+
+<br>
 #### Technology Used
 
 - HTML
-- CSS with grid containers
+- Responsive Web Design using CSS with grid containers 
 - Javascript
 - Jquery
 - API calls using AJAX
@@ -57,4 +107,4 @@ https://deckofcardsapi.com/
     - Setup
         - how many cards to be used for higher or lower
         - select back of card image to be used
-        - On the next round, do you want a new deck or continue playing of the same deck
+   
