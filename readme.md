@@ -1,23 +1,18 @@
-<div style="text-align: center;">
-
 ### Which Card is Higher?
 
 Created by Sue Wirth
 
-<a href='https://project1-virid-nine.vercel.app/'>Click to Play
+- link to play:  https://project1-virid-nine.vercel.app/
 
-LinkedIn: https://www.linkedin.com/in/sue-wirth/
+- LinkedIn: https://www.linkedin.com/in/suewirth/
 
-GitHub: https://github.com/SWIRTH9092
+- GitHub: https://github.com/SWIRTH9092  
+  
+#####Description 
 
-</div>
+    Will the next card be higher or lower? 
 
-<br>
-####:memo: Description 
-
-Will the next card be higher or lower?   
-<br>
-####:flower_playing_cards: How to Play
+##### How to Play
 1.  Click on the **card** that you think will be higher (the face up card or the face down card).
     -   A border will appear around the card selected and the face down card will be revealed.
     -   A mesage will be displayed as to whether or guess was correct or incorrect.
@@ -26,35 +21,14 @@ Will the next card be higher or lower?
     -   The card that was face down is moved to the face up position.
     -   Another card is drawn and placed face down.  Note:  cards are reshuffled when there are 10 cards left in the deck so you never run out of playing cards.
 
-<br>
 
-####Screen Shots
-wireframeimages/project1-01-webpage.jpg
+#####Screen Shots
+![Before Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot1-responsive.jpg "Before Guess")
+![After Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot2-responsive.jpg "After Guess")
 
 
-<table>
-<tr>
-    <td>Screenshot</td>
-    <td>Description</td>
-</tr>
 
-<tr>
-    <td>Before Card Draw</td>
-    <td> 
-        <img src="https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot1-responsive.jpg" height="200">
-    <td>
-</tr>
-
-<tr>
-    <td>After Card Draw</td>
-   <td> 
-        <img src="https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/screenshot2-responsive.jpg" height="200">
-    <td>
-</tr>
-</table>
-
-<br>
-#### Technology Used
+##### Technology Used
 
 - HTML
 - Responsive Web Design using CSS with grid containers 
@@ -63,18 +37,11 @@ wireframeimages/project1-01-webpage.jpg
 - API calls using AJAX
 - Local Storage (to save and display Cummulative Stats)
 
-
-#### Link to Project
-
-   https://project1-virid-nine.vercel.app/
-
-
-### API - Card Deck: 
+##### API - Card Deck: 
 
 https://deckofcardsapi.com/
 
 ### Daily Plan
-
 
 | Day | Goal |
 |-----|------|
