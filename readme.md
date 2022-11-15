@@ -23,10 +23,10 @@ Created by Sue Wirth
 
 
 #### Screen Shots
-![Before Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/project1/blob/main/images/screenshot1-responsive.jpg "Before Guess")
-![After Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/project1/blob/main/images/screenshot2-responsive.jpg "After Guess")
+![Before Guess](https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot1-responsive.jpg "Before Guess")
+![After Guess](/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot2-responsive.jpg "After Guess")
 
-
+https://github.com/SWIRTH9092/highercard/blob/main/wireframeimages/project1-01-webpage.jpg?raw=true
 
 #### Technology Used
 
