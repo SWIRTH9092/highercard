@@ -23,8 +23,11 @@ Created by Sue Wirth
 
 
 #### Screen Shots
+Before Guess
 ![Before Guess](https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot1-responsive.jpg "Before Guess")
-![After Guess](/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot2-responsive.jpg "After Guess")
+
+After Guess
+![After Guess](https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot2-responsive.jpg "After Guess")
 
 https://github.com/SWIRTH9092/highercard/blob/main/wireframeimages/project1-01-webpage.jpg?raw=true
 
