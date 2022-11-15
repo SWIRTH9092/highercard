@@ -8,11 +8,11 @@ Created by Sue Wirth
 
 - GitHub: https://github.com/SWIRTH9092  
   
-#####Description 
+#### Description 
 
     Will the next card be higher or lower? 
 
-##### How to Play
+#### How to Play
 1.  Click on the **card** that you think will be higher (the face up card or the face down card).
     -   A border will appear around the card selected and the face down card will be revealed.
     -   A mesage will be displayed as to whether or guess was correct or incorrect.
@@ -22,13 +22,13 @@ Created by Sue Wirth
     -   Another card is drawn and placed face down.  Note:  cards are reshuffled when there are 10 cards left in the deck so you never run out of playing cards.
 
 
-#####Screen Shots
-![Before Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot1-responsive.jpg "Before Guess")
-![After Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/highercard/blob/main/images/screenshot2-responsive.jpg "After Guess")
+#### Screen Shots
+![Before Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/project1/blob/main/images/screenshot1-responsive.jpg "Before Guess")
+![After Guess](https://github.com/SWIRTH9092/https://github.com/SWIRTH9092/project1/blob/main/images/screenshot2-responsive.jpg "After Guess")
 
 
 
-##### Technology Used
+#### Technology Used
 
 - HTML
 - Responsive Web Design using CSS with grid containers 
@@ -37,11 +37,11 @@ Created by Sue Wirth
 - API calls using AJAX
 - Local Storage (to save and display Cummulative Stats)
 
-##### API - Card Deck: 
+#### API - Card Deck: 
 
 https://deckofcardsapi.com/
 
-### Daily Plan
+#### Daily Plan
 
 | Day | Goal |
 |-----|------|
@@ -55,7 +55,7 @@ https://deckofcardsapi.com/
 | 8 | CSS Cosmetic Updates
 | 9 | Present Project
 
-### Wire Frames
+#### Wire Frames
 
 ![Grid Format](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-gridlayout.jpg "Grid")
 
@@ -69,7 +69,7 @@ https://deckofcardsapi.com/
 ![ph page 02](https://github.com/SWIRTH9092/project1/blob/main/wireframeimages/project1-11-phone.jpg "Phone page 2")
 
 
-### Stretch Objectives
+#### Stretch Objectives
 - add nav menu at top:  
     - Play
     - Rules - how to play the game
